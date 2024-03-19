@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-;
+
 
 class TreeTest {
 
@@ -21,8 +21,8 @@ class TreeTest {
 
     @BeforeEach
     void setUp() {
-        tree = new Tree(Path.of("./src/Task3/WriterFile"),
-                Path.of("./src/Task3"));
+        tree = new Tree(Path.of("src/main/resources/WriterFile"),
+                Path.of("src/main/java/ru/spbu/apcyb/svp/tasks/task3"));
     }
 
     @Test
@@ -35,7 +35,7 @@ class TreeTest {
     void walker() {
         ArrayList<String> files = new ArrayList<>();
 
-        try(BufferedReader br = Files.newBufferedReader(Path.of("./src/Task3/WriterFile"))) {
+        try(BufferedReader br = Files.newBufferedReader(Path.of("/Users/damir/IdeaProjects/special-computing-workshop-template/src/main/resources/WriterFile"))) {
             tree.walker();
             while (br.ready()) {
                 files.add(br.readLine());
@@ -46,12 +46,10 @@ class TreeTest {
 
         ArrayList<String> expected = new ArrayList<>();
 
-        expected.add("Enter to Directory: ./src/Task3");
-        expected.add("File name: ./src/Task3/Tree.java");
-        expected.add("File name: ./src/Task3/MyFileVisitor.java");
-        expected.add("File name: ./src/Task3/WriterFile");
-        expected.add("File name: ./src/Task3/TreeTest.java");
-        expected.add("Exit from Directory: ./src/Task3");
+        expected.add("Enter to Directory: src/main/java/ru/spbu/apcyb/svp/tasks/task3");
+        expected.add("File name: src/main/java/ru/spbu/apcyb/svp/tasks/task3/Tree.java");
+        expected.add("File name: src/main/java/ru/spbu/apcyb/svp/tasks/task3/MyFileVisitor.java");
+        expected.add("Exit from Directory: src/main/java/ru/spbu/apcyb/svp/tasks/task3");
 
         assertEquals(expected, files);
     }
