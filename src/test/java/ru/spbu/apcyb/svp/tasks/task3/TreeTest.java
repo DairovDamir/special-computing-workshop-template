@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-
 class TreeTest {
 
     private Tree tree;
@@ -52,5 +51,23 @@ class TreeTest {
         expected.add("Exit from Directory: src/main/java/ru/spbu/apcyb/svp/tasks/task3");
 
         assertEquals(expected, files);
+    }
+
+    @Test
+    void walkerIfThePathToDirectoryIsNotCorrect() {
+        tree = new Tree(Path.of("src/main/resources/WriterFile"), Path.of(" "));
+        assertThrows(IOException.class, () -> tree.walker());
+    }
+
+    @Test
+    void walkerIfThePathToDirectoryIsAPathToFile() {
+        tree = new Tree(Path.of("src/main/resources/WriterFile"), Path.of("src/main/resources/WriterFile"));
+        assertThrows(IOException.class, () -> tree.walker());
+    }
+
+    @Test
+    void mainIfArgsIsEmpty() {
+        String[] args = new String[0];
+        assertThrows(IOException.class, () -> Tree.main(args));
     }
 }

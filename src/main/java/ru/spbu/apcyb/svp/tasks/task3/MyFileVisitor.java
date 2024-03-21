@@ -1,6 +1,7 @@
 package ru.spbu.apcyb.svp.tasks.task3;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
@@ -35,7 +36,7 @@ public class MyFileVisitor implements FileVisitor<Path>{
             throws IOException {
         bw.write("Error when visiting file: " + file.toString());
         bw.newLine();
-        return FileVisitResult.CONTINUE;
+        return FileVisitResult.TERMINATE;
     }
 
     @Override
