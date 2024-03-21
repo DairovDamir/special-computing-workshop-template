@@ -19,8 +19,7 @@ public class Tree {
 
     public void walker() throws IOException {
         try(BufferedWriter writer = Files.newBufferedWriter(pathOfTheWriterFile)) {
-            File file = pathOfTheDirectory.toFile();
-            if (!file.isDirectory()) {
+            if (!Files.isDirectory(pathOfTheDirectory)) {
                 throw new IOException();
             }
             Files.walkFileTree(pathOfTheDirectory, new MyFileVisitor(writer));
