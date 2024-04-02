@@ -5,20 +5,17 @@ import java.nio.file.Path;
 import java.util.Scanner;
 
 public class Multithreading implements Runnable{
-    private final int startNum;
-    private final int finishNum;
+    private final int num;
     private final FileWriter fileWriter;
 
-    public Multithreading(int startNum, int finishNum, FileWriter fileWriter) {
-        this.startNum = startNum;
-        this.finishNum = finishNum;
+    public Multithreading(int num, FileWriter fileWriter) {
+        this.num = num;
         this.fileWriter = fileWriter;
     }
     @Override
     public void run() {
-            for (int i = startNum; i <= finishNum; i++) {
+            for (int i = 0; i < num; i++) {
                 fileWriter.setTanInMultiThreading(Math.tan(fileWriter.getArguments(i)));
-                System.out.println(i);
             }
     }
 
@@ -32,7 +29,7 @@ public class Multithreading implements Runnable{
 
 
         double startOfWork = System.currentTimeMillis();
-        fileWriter.calculate(num, fileWriter);
+        fileWriter.calc(fileWriter);
         fileWriter.writeTanMultiThreadingValues(Path.of(args[1]));
         double finishOfWork = System.currentTimeMillis();
 

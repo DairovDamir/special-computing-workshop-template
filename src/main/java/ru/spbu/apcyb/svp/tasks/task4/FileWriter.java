@@ -8,6 +8,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class FileWriter {
 
@@ -15,6 +17,8 @@ public class FileWriter {
     private final List<Double> tanInMultiThreading = Collections.synchronizedList(new ArrayList<>());
 
     private final List<Double> tanInSingleThreading = new ArrayList<>();
+
+    private final ExecutorService executorService = Executors.newFixedThreadPool(10);
 
     public FileWriter(Path path, int numOfArguments) throws IOException{
         arguments = new double[numOfArguments];
@@ -67,34 +71,8 @@ public class FileWriter {
         }
     }
 
-    public void calculate(int num, FileWriter fileWriter) throws IOException, InterruptedException {
-        Thread thread = null;
-            if (num == 0) {
-                throw new IOException("Number of arguments is zero");
-            } else if (num < 10) {
-                for (int i = 0; i < num; i++) {
-                     thread = new Thread(new Multithreading(i, i, fileWriter));
-                     thread.start();
-                }
-            } else {
-                int remain = num % 10;
-                if (remain == 0) {
-                    for (int i = 0; i < 10; i++) {
-                         thread = new Thread(new Multithreading(i * num / 10,
-                                 (i * num / 10) + (num / 10) - 1, fileWriter));
-                         thread.start();
-                    }
-                } else {
-                    for (int i = 0; i < 10; i++) {
-                        if (i < 9){
-                            thread = new Thread(new Multithreading(i * (1 + (num / 10)),
-                                (i * (1 + (num / 10))) + (1 + (num / 10)) - 1, fileWriter));
-                        } else {thread = new Thread(new Multithreading(9 * (1 + (num / 10)),
-                                num - 1, fileWriter));}
-                        thread.start();
-                    }
-               }
-            }
-            thread.join();
+    public void calc(FileWriter fileWriter) {
+        executorService.execute(new Multithreading(arguments.length, fileWriter));
+        executorService.shutdown();
     }
 }
