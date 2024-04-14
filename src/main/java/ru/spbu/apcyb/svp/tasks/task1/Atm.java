@@ -1,19 +1,15 @@
 package ru.spbu.apcyb.svp.tasks.task1;
 
 import java.util.*;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
+import java.util.logging.*;
 
 public class Atm {
-    private static Long  sum;
+    private static Long sum;
     private static final List<Long> banknotes = new ArrayList<>();
     private int count = 0;
     private List<long[]> comb = new ArrayList<>();
     private final Logger LOGGER = Logger.getLogger(Atm.class.getName());
-    private final ConsoleHandler ch = new ConsoleHandler();
-    private final SimpleFormatter sf = new SimpleFormatter();
+
     public static void scan() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter the amount and denominations of the bills separated by a space:");
@@ -30,6 +26,17 @@ public class Atm {
         Collections.reverse(banknotes);
     }
 
+    public void setSum(Long sum) {
+        this.sum = sum;
+    }
+
+    public void setBanknotes(String banknotes1) {
+        String[] b = banknotes1.split(" ");
+        for (String s : b) {
+            banknotes.add(Long.parseLong(s));
+        }
+    }
+
     public static Long getSum() {
         return sum;
     }
@@ -38,12 +45,21 @@ public class Atm {
         return count;
     }
 
-    public void getComb() {
-        calculateComb(sum, new long[banknotes.size()], 0);
-        LOGGER.log(Level.INFO, "count : {0} ", count);
+    public void getComb() throws Exception {
+        if (sum < banknotes.get(banknotes.size() - 1)) {
+            throw new Exception("The value of the amount is less than the value of the smallest banknote");
+        }
+        else {
+            calculateComb(sum, new long[banknotes.size()], 0);
+            LOGGER.log(Level.INFO, "count : {0} ", count);
+        }
     }
     public void printBanknotes() {
         for(Long l : banknotes) {System.out.print(l + " ");}
+    }
+
+    public List<long[]> getAllCombWithList() {
+        return comb;
     }
 
     private void calculateComb(long current, long[] nominal, int index) {
@@ -56,12 +72,13 @@ public class Atm {
 
                 if (current == 0) {
                     count++;
+                    List<String> printList = new ArrayList<>();
                     for (int j = 0; j < nominal.length; j++) {
                         for (int k = 0; k < nominal[j]; k++) {
-                            LOGGER.log(Level.INFO, "{0}", banknotes.get(j));
+                            printList.add(String.valueOf(banknotes.get(j)));
                         }
                     }
-                    LOGGER.info("End of the comb");
+                    LOGGER.log(Level.INFO, "{0}", printList);
 
                     if (count < 1000) {
                         comb.add(nominal);
@@ -76,10 +93,11 @@ public class Atm {
 
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
         Atm a = new Atm();
         a.scan();
         a.getComb();
+
     }
 
 }
