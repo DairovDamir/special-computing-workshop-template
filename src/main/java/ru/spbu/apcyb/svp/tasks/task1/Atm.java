@@ -16,8 +16,33 @@ public class Atm {
         String string = scanner.nextLine();
         String[] str = string.split(" ");
 
+        if(!isNum(str[0])) {
+            throw new NumberFormatException("The value of the amount is not a number");
+        }
         sum = Long.parseLong(str[0]);
         for (int i = 1; i < str.length; i++) {
+            if (!isNum((str[i]))) {
+                throw new NumberFormatException("The value of a banknote is not a number");
+            }
+            banknotes.add(Long.parseLong(str[i]));
+        }
+        HashSet<Long> set = new HashSet<>(banknotes);
+        banknotes.clear();
+        banknotes.addAll(set);
+        Collections.reverse(banknotes);
+    }
+
+    public static void scan(String string) {
+        String[] str = string.split(" ");
+
+        if(!isNum(str[0])) {
+            throw new NumberFormatException("The value of the amount is not a number");
+        }
+        sum = Long.parseLong(str[0]);
+        for (int i = 1; i < str.length; i++) {
+            if (!isNum((str[i]))) {
+                throw new NumberFormatException("The value of a banknote is not a number");
+            }
             banknotes.add(Long.parseLong(str[i]));
         }
         HashSet<Long> set = new HashSet<>(banknotes);
@@ -46,10 +71,11 @@ public class Atm {
     }
 
     public void getComb() throws Exception {
-        if (sum < banknotes.get(banknotes.size() - 1)) {
+        if (sum < 0) {
+            throw new Exception("The value of the amount is less than zero");
+        } else if (sum < banknotes.get(banknotes.size() - 1)) {
             throw new Exception("The value of the amount is less than the value of the smallest banknote");
-        }
-        else {
+        } else {
             calculateComb(sum, new long[banknotes.size()], 0);
             LOGGER.log(Level.INFO, "count : {0} ", count);
         }
@@ -89,6 +115,19 @@ public class Atm {
             }
             current -= banknotes.get(index);
         }
+    }
+
+    private static boolean isNum(String str) {
+        if (str == null) {
+            return false;
+        }
+
+        try {
+            Long l = Long.parseLong(str);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
     }
 
 

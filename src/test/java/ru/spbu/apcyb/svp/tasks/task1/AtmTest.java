@@ -1,15 +1,16 @@
 package ru.spbu.apcyb.svp.tasks.task1;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@RunWith(Parameterized.class)
 class AtmTest {
     private Atm atm;
-
     @BeforeEach
     void setUp() {
         atm = new Atm();
@@ -57,4 +58,21 @@ class AtmTest {
         assertTrue(ans.isEmpty());
     }
 
+    @Test
+    void getCombIfAmountIsNotNumber() {
+        String parameter = "a 1 2 3";
+        assertThrows(NumberFormatException.class, () -> atm.scan(parameter));
+    }
+
+    @Test
+    void getCombIfBanknoteIsNotNumber() {
+        String parameter = "12 a 2 3";
+        assertThrows(NumberFormatException.class, () -> atm.scan(parameter));
+    }
+
+    @Test
+    void getCombIfAmountIsNull() {
+        String parameter = "  1 2";
+        assertThrows(NumberFormatException.class, () -> atm.scan(parameter));
+    }
 }
